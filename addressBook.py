@@ -1,5 +1,6 @@
 from collections import UserDict
 
+
 class Field:
     def __init__(self, value):
         self.value = value
@@ -7,24 +8,64 @@ class Field:
     def __str__(self):
         return str(self.value)
 
+
 class Name(Field):
-    # реалізація класу
+    pass
+
 
 class Phone(Field):
-    # реалізація класу
+    def __init__(self, phone_number):
+        if self.is_phone(phone_number):
+            self.value = phone_number
+        else:
+            raise ValueError("Invalid phone value")
+
+    @staticmethod
+    def is_phone(phone_number):
+        return len(phone_number) == 10 and phone_number.isdigit()
+
 
 class Record:
     def __init__(self, name):
         self.name = Name(name)
         self.phones = []
 
-    # реалізація класу
+    def add_phone(self, phone):
+        self.phones.append(Phone(phone))
+
+    def remove_phone(self, phone_number):
+        for i, phone in enumerate(self.phones):
+            if phone.value == phone_number:
+                del self.phones[i]
+                return "Phone removed"
+        raise ValueError("Phone not found")
+
+    def edit_phone(self, old_phone, new_phone):
+        for i, phone in enumerate(self.phones):
+            if phone.value == old_phone:
+                self.phones[i] = Phone(new_phone)
+                return "Phone changed"
+        raise ValueError("Phone not found")
+
+    def find_phone(self, phone_number):
+        for phone in self.phones:
+            if phone.value == phone_number:
+                return phone
 
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
 
+
 class AddressBook(UserDict):
-    # реалізація класу
+    def add_record(self, record):
+        self.data[record.name.value] = record
+
+    def find(self, name):
+        return self.data.get(name, None)
+
+    def delete(self, name):
+        del self.data[name]
+
 
 if __name__ == "__main__":
     book = AddressBook()
