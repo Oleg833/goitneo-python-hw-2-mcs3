@@ -15,10 +15,9 @@ class Name(Field):
 
 class Phone(Field):
     def __init__(self, phone_number):
-        if self.is_phone(phone_number):
-            self.value = phone_number
-        else:
+        if not self.is_phone(phone_number):
             raise ValueError("Invalid phone value")
+        self.value = phone_number
 
     @staticmethod
     def is_phone(phone_number):
